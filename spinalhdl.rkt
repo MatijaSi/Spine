@@ -1,6 +1,14 @@
 #lang racket
 
 (require "generic.rkt")
+(provide cond-compile
+         spinalbox-generate
+         comment-generate
+         wire-generate
+         bundle-generate
+         component-generate
+         object-generate
+         scala-function-generate)
 
 ; general compile
 (define (cond-compile template)
@@ -91,4 +99,4 @@
 (define main (scala-function-generate "main" "args: Array[String]" (list main-body)))
 (define object (object-generate "AND_GATE" (list main)))
 
-(display (apply string-append (map cond-compile (list import component object))))
+;(display (apply string-append (map cond-compile (list import component object))))
