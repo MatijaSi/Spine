@@ -1,6 +1,7 @@
 #lang racket
 
 (require "spinalhdl.rkt")
+(require "auto-indent.rkt")
 
 ; higher level, builds upon wrappers
 
@@ -34,19 +35,22 @@
 (define (hw:2in-1out-bool-component name logic)
   (hw:component name (cons (wire-generate "c" "out" "Bool") (hw:wires '("a" "b") "in" "Bool")) logic))
 
-(define (display&cond-compile hw)
-  (display (cond-compile hw)))
+(define (display&indent-compile hw)
+  (display (indent-compile hw)))
 
-(define (multi-display&cond-compile lst)
+(define (multi-display&indent-compile lst)
   (map (lambda (hw) (begin
-                      (display&cond-compile hw)
+                      (display&indent-compile hw)
                       (newline)
                       "ok"))
        lst))
-        
+
+(define (indent-compile hw)
+  (auto-indent (cond-compile hw)))
+
 ; test
 
 (define and-gate (hw:2in-1out-bool-component "AND_GATE"
                                              (:= "io.c" '(& "io.a" "io.b"))))
 
-(multi-display&cond-compile (list and-gate (hw:init-object and-gate)))
+(multi-display&indent-compile (list and-gate (hw:init-object and-gate)))
